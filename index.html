@@ -4,119 +4,266 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>HindiFlix</title>
+  <title>HindiFlix - Hindi Movies & Drama</title>
 
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      background: #0b0b0f;
-      color: white;
+      background: #08090d;
+      color: #fff;
       font-family: Arial, sans-serif;
     }
 
+    /* HEADER */
     header {
-      padding: 18px;
-      background: #111118;
+      height: 65px;
+      padding: 0 20px;
+      background: #0d0e13;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1c1d24;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 25px;
       font-weight: bold;
+      color: #ff1744;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
     }
 
     nav a {
       color: #aaa;
       text-decoration: none;
-      margin-left: 15px;
+      font-size: 14px;
     }
 
+    nav a:hover {
+      color: #fff;
+    }
+
+    /* HERO */
     .hero {
-      padding: 60px 20px;
+      min-height: 390px;
+      padding: 75px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      background: linear-gradient(#171725, #0b0b0f);
+      background:
+        linear-gradient(to bottom, rgba(8,9,13,.35), #08090d),
+        radial-gradient(circle at center, #3b1422, #08090d 65%);
+    }
+
+    .hero-content {
+      max-width: 700px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 13px;
+      background: rgba(255,23,68,.15);
+      color: #ff5270;
+      border: 1px solid rgba(255,23,68,.3);
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 18px;
     }
 
     .hero h1 {
-      font-size: 38px;
+      font-size: 42px;
+      line-height: 1.15;
       margin-bottom: 15px;
     }
 
     .hero p {
       color: #aaa;
+      font-size: 15px;
       margin-bottom: 25px;
     }
 
-    .search {
-      width: 90%;
-      max-width: 500px;
-      padding: 14px;
+    .search-box {
+      width: 100%;
+      max-width: 550px;
+      margin: auto;
+      display: flex;
+      background: #fff;
       border-radius: 8px;
-      border: none;
-      outline: none;
-      font-size: 16px;
-    }
-
-    .section {
-      padding: 25px 18px;
-    }
-
-    .section h2 {
-      margin-bottom: 18px;
-    }
-
-    .movies {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .card {
-      background: #15151d;
-      border-radius: 10px;
       overflow: hidden;
     }
 
-    .poster {
-      width: 100%;
-      aspect-ratio: 2 / 3;
-      background: #252532;
+    .search-box input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .search-box button {
+      border: none;
+      background: #ff1744;
+      color: white;
+      padding: 0 20px;
+      font-weight: bold;
+    }
+
+    /* CONTENT */
+    .section {
+      padding: 30px 18px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section-title {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      color: #777;
+      margin-bottom: 18px;
     }
 
-    .info {
-      padding: 12px;
+    .section-title h2 {
+      font-size: 21px;
     }
 
-    .info h3 {
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-
-    .info p {
-      color: #999;
+    .section-title span {
+      color: #888;
       font-size: 13px;
     }
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #777;
+    /* CARDS */
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
+    .card {
+      background: #111218;
+      border-radius: 9px;
+      overflow: hidden;
+      border: 1px solid #1c1d24;
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #ff1744;
+    }
+
+    .poster {
+      aspect-ratio: 2 / 3;
+      background:
+        linear-gradient(135deg, #252630, #111218);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .info {
+      padding: 11px;
+    }
+
+    .info h3 {
+      font-size: 15px;
+      margin-bottom: 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .meta {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .rating {
+      color: #ffc107;
+    }
+
+    /* CATEGORY */
+    .categories {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .category {
+      flex-shrink: 0;
+      padding: 10px 16px;
+      background: #14151c;
+      border: 1px solid #22232c;
+      border-radius: 20px;
+      color: #bbb;
+      font-size: 13px;
+    }
+
+    .category.active {
+      background: #ff1744;
+      color: #fff;
+      border-color: #ff1744;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 30px;
+      padding: 35px 20px;
+      text-align: center;
+      background: #0d0e13;
+      border-top: 1px solid #1c1d24;
+      color: #666;
+      font-size: 12px;
+    }
+
+    footer strong {
+      color: #ff1744;
+    }
+
+    /* MOBILE */
+    @media (max-width: 500px) {
+      .hero {
+        min-height: 350px;
+        padding: 60px 18px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      nav {
+        gap: 10px;
+      }
+
+      nav a {
+        font-size: 12px;
+      }
+    }
+
+    /* TABLET / DESKTOP */
     @media (min-width: 700px) {
       .movies {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .movies {
+        grid-template-columns: repeat(6, 1fr);
       }
     }
   </style>
@@ -124,69 +271,200 @@
 
 <body>
 
+  <!-- HEADER -->
   <header>
     <div class="logo">HindiFlix</div>
 
     <nav>
       <a href="#">Home</a>
-      <a href="#">Movies</a>
-      <a href="#">Drama</a>
+      <a href="#movies">Movies</a>
+      <a href="#drama">Drama</a>
     </nav>
   </header>
 
+
+  <!-- HERO -->
   <section class="hero">
-    <h1>Watch Hindi Movies & Drama</h1>
-    <p>Discover movies and dramas in one place.</p>
+    <div class="hero-content">
 
-    <input
-      class="search"
-      type="text"
-      placeholder="Search movies or dramas..."
-    >
-  </section>
+      <div class="tag">🎬 HINDI ENTERTAINMENT</div>
 
-  <section class="section">
-    <h2>🔥 Trending</h2>
+      <h1>Discover Hindi Movies & Drama</h1>
 
-    <div class="movies">
+      <p>
+        Explore movies, dramas and entertainment all in one place.
+      </p>
 
-      <div class="card">
-        <div class="poster">Poster</div>
-        <div class="info">
-          <h3>Movie Name</h3>
-          <p>⭐ 8.5 • Hindi</p>
-        </div>
-      </div>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search movies or dramas..."
+        >
 
-      <div class="card">
-        <div class="poster">Poster</div>
-        <div class="info">
-          <h3>Drama Name</h3>
-          <p>⭐ 8.2 • Drama</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="poster">Poster</div>
-        <div class="info">
-          <h3>Movie Name</h3>
-          <p>⭐ 7.9 • Hindi</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="poster">Poster</div>
-        <div class="info">
-          <h3>Drama Name</h3>
-          <p>⭐ 8.1 • Drama</p>
-        </div>
+        <button>Search</button>
       </div>
 
     </div>
   </section>
 
+
+  <!-- CATEGORIES -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>Browse Categories</h2>
+    </div>
+
+    <div class="categories">
+      <div class="category active">All</div>
+      <div class="category">Movies</div>
+      <div class="category">Drama</div>
+      <div class="category">Action</div>
+      <div class="category">Comedy</div>
+      <div class="category">Romance</div>
+    </div>
+
+  </section>
+
+
+  <!-- TRENDING -->
+  <section class="section" id="movies">
+
+    <div class="section-title">
+      <h2>🔥 Trending Movies</h2>
+      <span>View All →</span>
+    </div>
+
+    <div class="movies">
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Movie 01</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.5</span> • Movie
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Movie 02</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.2</span> • Movie
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Movie 03</h3>
+          <div class="meta">
+            <span class="rating">⭐ 7.9</span> • Movie
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Movie 04</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.1</span> • Movie
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Movie 05</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.0</span> • Movie
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Movie 06</h3>
+          <div class="meta">
+            <span class="rating">⭐ 7.8</span> • Movie
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DRAMA -->
+  <section class="section" id="drama">
+
+    <div class="section-title">
+      <h2>📺 Popular Drama</h2>
+      <span>View All →</span>
+    </div>
+
+    <div class="movies">
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Drama 01</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.7</span> • Drama
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Drama 02</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.4</span> • Drama
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Drama 03</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.1</span> • Drama
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">POSTER</div>
+        <div class="info">
+          <h3>Hindi Drama 04</h3>
+          <div class="meta">
+            <span class="rating">⭐ 8.3</span> • Drama
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
   <footer>
-    © 2026 HindiFlix
+    <p>
+      © 2026 <strong>HindiFlix</strong>
+    </p>
+    <p style="margin-top:8px;">
+      Hindi Movies & Drama Discovery Platform
+    </p>
   </footer>
 
 </body>
