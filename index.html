@@ -1,265 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HindiFlix - Movies & TV Series</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HindiFlix - Movies & Drama</title>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { background: #08090d; color: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0b0b0f; color: #fff; font-family: 'Segoe UI', sans-serif; }
+    header { background: #111116; padding: 16px 5%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 26px; font-weight: bold; color: #e50914; letter-spacing: 1px; }
+    .hero { padding: 40px 5%; background: linear-gradient(180deg, #161622 0%, #0b0b0f 100%); }
+    .hero h1 { font-size: 30px; margin-bottom: 10px; }
+    .hero p { color: #aaa; font-size: 14px; line-height: 1.5; }
+    .search-box { display: flex; gap: 10px; margin-top: 25px; max-width: 600px; }
+    .search-box input { flex: 1; padding: 12px 16px; border: 1px solid #29292f; border-radius: 8px; background: #19191f; color: white; outline: none; }
+    .search-box button { border: 0; padding: 0 24px; border-radius: 8px; background: #e50914; color: white; font-weight: bold; cursor: pointer; }
+    section { padding: 20px 5% 40px; }
+    section h2 { margin-bottom: 18px; font-size: 20px; }
+    .movies { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media(min-width: 600px){ .movies { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; } }
+    .movie-card { background: #15151b; border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid #222; }
+    .movie-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: #202028; }
+    .movie-info { padding: 10px; }
+    .movie-info h3 { font-size: 13px; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .movie-info p { color: #aaa; font-size: 11px; }
+    .loading { color: #aaa; padding: 20px 0; font-size: 14px; grid-column: 1/-1; text-align: center; }
     
-    header { background: #11121a; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1f2230; position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 20px; font-weight: 800; color: #e50914; letter-spacing: 0.5px; }
-    
-    .nav-tabs { display: flex; gap: 6px; }
-    .tab-btn { background: #181b26; color: #9aa0a6; border: 1px solid #282d3f; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
-    .tab-btn.active { background: #e50914; color: #fff; border-color: #e50914; }
-
-    .hero { padding: 20px 16px 10px; text-align: center; }
-    .hero h1 { font-size: 22px; margin-bottom: 6px; }
-    .hero p { color: #8a909d; font-size: 13px; }
-    
-    .search-box { display: flex; gap: 6px; margin: 15px auto 0; max-width: 480px; }
-    .search-box input { flex: 1; padding: 10px 12px; border: 1px solid #282d3f; border-radius: 6px; background: #13151f; color: #fff; outline: none; font-size: 14px; }
-    .search-box input:focus { border-color: #e50914; }
-    .search-box button { background: #e50914; color: #fff; border: 0; padding: 0 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
-
-    main { padding: 16px; min-height: 60vh; }
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    @media (min-width: 600px) {
-      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
-    }
-    
-    .card { background: #12141d; border: 1px solid #1e2230; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
-    .card:active { transform: scale(0.98); }
-    .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: #1a1d29; display: block; }
-    .card-info { padding: 8px; flex: 1; display: flex; flex-direction: column; }
-    .card-info h3 { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-info span { font-size: 11px; color: #f59e0b; margin-top: 4px; font-weight: 600; }
-
-    /* Mobile Optimized Pagination */
-    .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 25px; }
-    .page-btn { background: #141724; color: #fff; border: 1px solid #252a3d; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
-    .page-btn.active { background: #e50914; border-color: #e50914; }
-    .page-btn:disabled { opacity: 0.3; }
-
-    /* Video Player Modal */
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 10px; }
-    .modal-box { background: #12141d; width: 100%; max-width: 850px; border-radius: 8px; overflow: hidden; border: 1px solid #282d3f; position: relative; }
-    .close-btn { position: absolute; right: 10px; top: 8px; background: #e50914; border: 0; color: #fff; width: 28px; height: 28px; border-radius: 50%; font-size: 15px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
-    
-    .controls { padding: 10px; background: #161925; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; border-bottom: 1px solid #282d3f; }
-    .controls select, .controls input { background: #0b0c12; color: #fff; border: 1px solid #2e344a; padding: 5px 8px; border-radius: 4px; outline: none; font-size: 12px; }
-    
-    .player-wrap { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
-    .player-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-    
-    .details { padding: 12px; }
-    .details h2 { font-size: 16px; margin-bottom: 4px; }
-    .details p { font-size: 12px; color: #9aa0a6; line-height: 1.4; max-height: 80px; overflow-y: auto; }
+    /* MODAL */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; display: none; align-items: center; justify-content: center; padding: 15px; }
+    .modal-box { background: #15151b; width: 100%; max-width: 850px; border-radius: 10px; border: 1px solid #29292f; position: relative; }
+    .player-container { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
+    .player-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .modal-close { position: absolute; right: 10px; top: 10px; width: 32px; height: 32px; background: #e50914; color: white; border: 0; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 10; }
+    .modal-content { padding: 15px; }
+    .modal-content h2 { font-size: 18px; margin-bottom: 5px; }
+    .modal-content p { color: #bbb; font-size: 13px; line-height: 1.5; max-height: 80px; overflow-y: auto; }
+    .controls { padding: 10px 15px; background: #101015; border-bottom: 1px solid #222; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 12px; }
+    .controls select, .controls input { background: #1a1a24; color: white; border: 1px solid #333; padding: 5px; border-radius: 4px; outline: none; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="logo">HindiFlix</div>
-    <div class="nav-tabs">
-      <button class="tab-btn active" id="movieTabBtn" onclick="switchMedia('movie')">Movies</button>
-      <button class="tab-btn" id="tvTabBtn" onclick="switchMedia('tv')">Series</button>
-    </div>
   </header>
 
-  <div class="hero">
-    <h1 id="heroTitle">Hindi Movies</h1>
-    <p>Watch latest Hindi movies and drama series.</p>
+  <section class="hero">
+    <h1>হিন্দি মুভি এবং ড্রামা সিরিজ</h1>
+    <p>সর্বশেষ প্রকাশিত হিন্দি মুভি ও ওয়েব সিরিজ দেখুন সরাসরি।</p>
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search by name...">
-      <button onclick="handleSearch()">Search</button>
+      <input type="text" id="searchInput" placeholder="মুভি বা ড্রামার নাম লিখে খুঁজুন...">
+      <button onclick="doSearch()">Search</button>
     </div>
-  </div>
+  </section>
 
-  <main>
-    <div class="grid" id="contentGrid"></div>
+  <section id="movies">
+    <h2>🎬 লেটেস্ট হিন্দি মুভি</h2>
+    <div class="movies" id="movieGrid">
+      <p class="loading">মুভি লোড হচ্ছে...</p>
+    </div>
+  </section>
 
-    <div class="pagination" id="paginationBox"></div>
-  </main>
+  <section id="drama">
+    <h2>📺 জনপ্রিয় ড্রামা ও ওয়েব সিরিজ</h2>
+    <div class="movies" id="dramaGrid">
+      <p class="loading">ড্রামা লোড হচ্ছে...</p>
+    </div>
+  </section>
 
-  <!-- Video Streaming Modal -->
-  <div class="modal" id="videoModal">
+  <!-- Video Player Modal -->
+  <div class="modal-bg" id="videoModal">
     <div class="modal-box">
-      <button class="close-btn" onclick="closePlayer()">✕</button>
+      <button class="modal-close" onclick="closePlayer()">✕</button>
       
       <div class="controls">
-        <label>Server:
-          <select id="serverChoice" onchange="updateVideoSource()">
-            <option value="vidsrc_icu">Server 1</option>
-            <option value="vidsrc_cc">Server 2</option>
-            <option value="smashystream">Server 3</option>
+        <label>সার্ভার: 
+          <select id="serverChoice" onchange="updatePlayer()">
+            <option value="vidsrc_icu">সার্ভার ১ (Fast)</option>
+            <option value="vidsrc_cc">সার্ভার ২</option>
+            <option value="smashystream">সার্ভার ৩</option>
           </select>
         </label>
-
-        <span id="tvControls" style="display:none; gap: 6px; align-items: center;">
-          <label>S: <input type="number" id="seasonNum" value="1" min="1" style="width:42px" onchange="updateVideoSource()"></label>
-          <label>E: <input type="number" id="episodeNum" value="1" min="1" style="width:46px" onchange="updateVideoSource()"></label>
+        <span id="tvControls" style="display:none; gap: 10px;">
+          <label>সিজন: <input type="number" id="sNum" value="1" min="1" style="width:40px" onchange="updatePlayer()"></label>
+          <label>পর্ব: <input type="number" id="eNum" value="1" min="1" style="width:40px" onchange="updatePlayer()"></label>
         </span>
       </div>
 
-      <div class="player-wrap">
-        <iframe id="videoFrame" src="" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+      <div class="player-container">
+        <iframe id="videoFrame" allowfullscreen></iframe>
       </div>
-      <div class="details">
+      <div class="modal-content">
         <h2 id="modalTitle">Title</h2>
-        <p id="modalDesc">Overview</p>
+        <p id="modalDesc">Desc</p>
       </div>
     </div>
   </div>
 
   <script>
     const API_KEY = "8414ff0f96035414f48b598b965f3a0a";
-    const IMG_PATH = "https://image.tmdb.org/t/p/w500";
-
-    let currentType = 'movie';
-    let currentPage = 1;
-    let totalPages = 50; 
+    const IMG_BASE = "https://image.tmdb.org/t/p/w500";
+    
     let activeMedia = { id: null, type: 'movie' };
 
-    // Built-in verified database so that mobile never shows blank
-    const fallbackDB = {
-      movie: [
-        { id: 872585, title: "Oppenheimer", vote_average: 8.1, release_date: "2023", poster_path: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", overview: "The story of J. Robert Oppenheimer's role in the Manhattan Project." },
-        { id: 799883, title: "Dunki", vote_average: 7.2, release_date: "2023", poster_path: "/46Dbk62bsp7zGfx7f3e8f85f34.jpg", overview: "Four friends from a village embark on an arduous journey to England." },
-        { id: 872906, title: "Jawan", vote_average: 7.3, release_date: "2023", poster_path: "/jA2a6mP8m3b4lK2i0iW3x6vK8.jpg", overview: "A man is driven by a personal vendetta to rectify the wrongs in society." },
-        { id: 695721, title: "The Hunger Games", vote_average: 7.1, release_date: "2023", poster_path: "/mBaXZ95R2OxueZhvQbcEWy2DqyO.jpg", overview: "The story of Coriolanus Snow before he became President of Panem." },
-        { id: 575264, title: "Mission: Impossible - Dead Reckoning", vote_average: 7.6, release_date: "2023", poster_path: "/NNxYkU70HPurnNCSiCjYAmacwm.jpg", overview: "Ethan Hunt and his IMF team must track down a dangerous weapon." },
-        { id: 385687, title: "Fast X", vote_average: 7.1, release_date: "2023", poster_path: "/fiVW06jE7z9YnO4trhaMEdclSiC.jpg", overview: "Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes." },
-        { id: 603692, title: "John Wick: Chapter 4", vote_average: 7.8, release_date: "2023", poster_path: "/vZloFAK7NKnMGKEslUsZtos8OPD.jpg", overview: "With the price on his head ever increasing, John Wick uncovers a path to defeating The High Table." },
-        { id: 569094, title: "Spider-Man: Across the Spider-Verse", vote_average: 8.4, release_date: "2023", poster_path: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg", overview: "Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People." }
-      ],
-      tv: [
-        { id: 94997, name: "Panchayat", vote_average: 8.5, first_air_date: "2020", poster_path: "/9k0v03v1eZqZkL0e2c842p8g001.jpg", overview: "An engineering graduate takes up a job as a secretary in a remote village." },
-        { id: 82250, name: "Sacred Games", vote_average: 8.6, first_air_date: "2018", poster_path: "/uG0t670L5s4p3.jpg", overview: "A link in their pasts leads an honest cop to an elusive gangster." },
-        { id: 80986, name: "Mirzapur", vote_average: 8.4, first_air_date: "2018", poster_path: "/k7K77c7xYn7F2k55zW8k0M0349.jpg", overview: "A shocking incident at a wedding procession ignites a war between two families." },
-        { id: 93405, name: "Squid Game", vote_average: 7.8, first_air_date: "2021", poster_path: "/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg", overview: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games." },
-        { id: 119051, name: "Wednesday", vote_average: 8.5, first_air_date: "2022", poster_path: "/9PFonQ9cc09rg6r2aNkhT8qUTMz.jpg", overview: "Wednesday Addams attempts to master her emerging psychic ability." },
-        { id: 71446, name: "Money Heist", vote_average: 8.2, first_air_date: "2017", poster_path: "/reEMJA1uzscCbk5rUhGnyezvgAS.jpg", overview: "An unusual group of robbers attempt to carry out the most perfect robbery." }
-      ]
-    };
+    // ব্যাকআপ ডাটা (ইন্টারনেট ব্লক থাকলেও এগুলো লোড হবে)
+    const backupMovies = [
+      { id: 872585, title: "Oppenheimer", vote_average: 8.1, release_date: "2023", poster_path: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" },
+      { id: 799883, title: "Dunki", vote_average: 7.2, release_date: "2023", poster_path: "/46Dbk62bsp7zGfx7f3e8f85f34.jpg" },
+      { id: 872906, title: "Jawan", vote_average: 7.3, release_date: "2023", poster_path: "/jA2a6mP8m3b4lK2i0iW3x6vK8.jpg" },
+      { id: 1034541, title: "Fighter", vote_average: 6.8, release_date: "2024", poster_path: "/zDZowwb9GZGEctAu2PCpjiPQAMM.jpg" },
+      { id: 1111622, title: "Animal", vote_average: 7.2, release_date: "2023", poster_path: "/xM4U9A608oEK9h69GkU2uLgC1r1.jpg" },
+      { id: 784651, title: "Pathaan", vote_average: 6.7, release_date: "2023", poster_path: "/43aZhtYVj0n8AHT1UHTv3Nq8M2K.jpg" }
+    ];
 
-    const grid = document.getElementById("contentGrid");
-    const paginationBox = document.getElementById("paginationBox");
+    const backupDramas = [
+      { id: 94997, name: "Panchayat", vote_average: 8.5, first_air_date: "2020", poster_path: "/9k0v03v1eZqZkL0e2c842p8g001.jpg" },
+      { id: 80986, name: "Mirzapur", vote_average: 8.4, first_air_date: "2018", poster_path: "/k7K77c7xYn7F2k55zW8k0M0349.jpg" },
+      { id: 82250, name: "Sacred Games", vote_average: 8.6, first_air_date: "2018", poster_path: "/uG0t670L5s4p3.jpg" },
+      { id: 111803, name: "Farzi", vote_average: 8.3, first_air_date: "2023", poster_path: "/wA286o1h29b8c0D0VayJ6q32jT6.jpg" },
+      { id: 120168, name: "The Family Man", vote_average: 8.5, first_air_date: "2019", poster_path: "/eA28zFhN0kI8N1nSyyfR6n3FDEa.jpg" },
+      { id: 157293, name: "Asur", vote_average: 8.6, first_air_date: "2020", poster_path: "/xI6I7D9l6y28sQWb2u1l33W1L9Q.jpg" }
+    ];
 
-    function switchMedia(type) {
-      currentType = type;
-      currentPage = 1;
-      document.getElementById("movieTabBtn").classList.toggle("active", type === 'movie');
-      document.getElementById("tvTabBtn").classList.toggle("active", type === 'tv');
-      document.getElementById("heroTitle").innerText = type === 'movie' ? "Hindi Movies" : "Drama & Series";
-      fetchContent();
-    }
-
-    async function fetchContent() {
-      grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 30px;'>Loading titles...</p>";
-      
-      const url = `https://api.themoviedb.org/3/discover/${currentType}?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=${currentPage}`;
-
+    async function loadContent() {
+      // 1. Load Movies
       try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Network response error");
-        const data = await res.json();
-        
-        if (data.results && data.results.length > 0) {
-          totalPages = Math.min(data.total_pages, 100);
-          renderItems(data.results);
-        } else {
-          loadFallback();
-        }
+        const mRes = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=1`);
+        if(!mRes.ok) throw new Error();
+        const mData = await mRes.json();
+        renderItems(mData.results, 'movieGrid', 'movie');
       } catch (err) {
-        loadFallback();
+        renderItems(backupMovies, 'movieGrid', 'movie'); // Network blocked, load backup
+      }
+
+      // 2. Load Dramas
+      try {
+        const dRes = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=1`);
+        if(!dRes.ok) throw new Error();
+        const dData = await dRes.json();
+        renderItems(dData.results, 'dramaGrid', 'tv');
+      } catch (err) {
+        renderItems(backupDramas, 'dramaGrid', 'tv'); // Network blocked, load backup
       }
     }
 
-    function loadFallback() {
-      const items = fallbackDB[currentType];
-      renderItems(items);
-    }
-
-    function renderItems(list) {
-      grid.innerHTML = list.map(item => {
-        const title = item.title || item.name || "Untitled";
+    function renderItems(items, gridId, type) {
+      const container = document.getElementById(gridId);
+      if (!items || items.length === 0) {
+        container.innerHTML = "<p class='loading'>কোনো কনটেন্ট পাওয়া যায়নি।</p>";
+        return;
+      }
+      container.innerHTML = items.map(item => {
+        const title = item.title || item.name;
         const date = (item.release_date || item.first_air_date || "").slice(0, 4);
-        const poster = item.poster_path ? (IMG_PATH + item.poster_path) : "https://placehold.co/300x450/13151f/ffffff?text=Poster";
-        const cleanTitle = title.replace(/["']/g, "");
-        const cleanDesc = (item.overview || "No overview available.").replace(/["']/g, "");
-
+        const poster = item.poster_path ? (IMG_BASE + item.poster_path) : "https://placehold.co/300x450/19191f/fff?text=No+Poster";
+        const cleanTitle = title.replace(/['"]/g, "");
+        const cleanOverview = (item.overview || "কোনো বিবরণ নেই।").replace(/['"]/g, "");
+        
         return `
-          <div class="card" onclick="openPlayer(${item.id}, '${currentType}', '${cleanTitle}', '${cleanDesc}')">
-            <img src="${poster}" alt="${cleanTitle}" loading="lazy" onerror="this.src='https://placehold.co/300x450/13151f/ffffff?text=Poster'">
-            <div class="card-info">
+          <div class="movie-card" onclick="openPlayer(${item.id}, '${type}', '${cleanTitle}', '${cleanOverview}')">
+            <img src="${poster}" alt="${cleanTitle}" loading="lazy">
+            <div class="movie-info">
               <h3>${cleanTitle}</h3>
-              <span>★ ${item.vote_average ? item.vote_average.toFixed(1) : "N/A"} • ${date || 'Hindi'}</span>
+              <p>⭐ ${item.vote_average ? item.vote_average.toFixed(1) : 'N/A'} • ${date || 'Hindi'}</p>
             </div>
           </div>
         `;
-      }).join('');
-
-      renderPagination();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function renderPagination() {
-      let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="gotoPage(${currentPage - 1})">Prev</button>`;
-      
-      let startPage = Math.max(1, currentPage - 1);
-      let endPage = Math.min(totalPages, startPage + 2);
-      
-      for (let i = startPage; i <= endPage; i++) {
-        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="gotoPage(${i})">${i}</button>`;
-      }
-      
-      html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="gotoPage(${currentPage + 1})">Next</button>`;
-      paginationBox.innerHTML = html;
-    }
-
-    function gotoPage(p) {
-      currentPage = p;
-      fetchContent();
+      }).join("");
     }
 
     function openPlayer(id, type, title, overview) {
       activeMedia = { id, type };
       document.getElementById("modalTitle").innerText = title;
       document.getElementById("modalDesc").innerText = overview;
-      document.getElementById("tvControls").style.display = type === 'tv' ? 'inline-flex' : 'none';
-
-      document.getElementById("seasonNum").value = 1;
-      document.getElementById("episodeNum").value = 1;
-
-      updateVideoSource();
+      document.getElementById("tvControls").style.display = (type === 'tv') ? 'flex' : 'none';
+      document.getElementById("sNum").value = 1;
+      document.getElementById("eNum").value = 1;
+      
+      updatePlayer();
       document.getElementById("videoModal").style.display = "flex";
       document.body.style.overflow = "hidden";
     }
 
-    function updateVideoSource() {
+    function updatePlayer() {
       const { id, type } = activeMedia;
-      const server = document.getElementById("serverChoice").value;
-      const s = document.getElementById("seasonNum").value || 1;
-      const e = document.getElementById("episodeNum").value || 1;
+      const srv = document.getElementById("serverChoice").value;
+      const s = document.getElementById("sNum").value || 1;
+      const e = document.getElementById("eNum").value || 1;
       let url = "";
 
-      if (server === "vidsrc_icu") {
-        url = type === 'movie' 
-          ? `https://vidsrc.icu/embed/movie/${id}`
-          : `https://vidsrc.icu/embed/tv/${id}/${s}/${e}`;
-      } else if (server === "vidsrc_cc") {
-        url = type === 'movie' 
-          ? `https://vidsrc.cc/v2/embed/movie/${id}`
-          : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`;
+      if(srv === 'vidsrc_icu') {
+        url = type === 'movie' ? `https://vidsrc.icu/embed/movie/${id}` : `https://vidsrc.icu/embed/tv/${id}/${s}/${e}`;
+      } else if (srv === 'vidsrc_cc') {
+        url = type === 'movie' ? `https://vidsrc.cc/v2/embed/movie/${id}` : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`;
       } else {
-        url = type === 'movie' 
-          ? `https://embed.smashystream.com/playere.php?tmdb=${id}`
-          : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`;
+        url = type === 'movie' ? `https://embed.smashystream.com/playere.php?tmdb=${id}` : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`;
       }
-
       document.getElementById("videoFrame").src = url;
     }
 
@@ -269,35 +206,7 @@
       document.body.style.overflow = "";
     }
 
-    async function handleSearch() {
-      const q = document.getElementById("searchInput").value.trim();
-      if (!q) {
-        currentPage = 1;
-        fetchContent();
-        return;
-      }
-
-      grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 30px;'>Searching...</p>";
-
-      try {
-        const res = await fetch(`https://api.themoviedb.org/3/search/${currentType}?api_key=${API_KEY}&query=${encodeURIComponent(q)}`);
-        const data = await res.json();
-        if (data.results && data.results.length) {
-          renderItems(data.results);
-          paginationBox.innerHTML = "";
-        } else {
-          grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 30px;'>No results found.</p>";
-        }
-      } catch (err) {
-        grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #ef4444; padding: 30px;'>Search unavailable offline.</p>";
-      }
-    }
-
-    document.getElementById("searchInput").addEventListener("keypress", (e) => {
-      if (e.key === "Enter") handleSearch();
-    });
-
-    fetchContent();
+    loadContent();
   </script>
 </body>
 </html>
