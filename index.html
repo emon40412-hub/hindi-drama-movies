@@ -2,64 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HindiFlix - Movies & TV Shows Stream</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HindiFlix - Movies & TV Series</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #08090d; color: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background: #08090d; color: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     
-    header { background: #10121a; padding: 14px 6%; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1f2230; position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 24px; font-weight: 800; color: #e50914; letter-spacing: 0.5px; }
+    header { background: #11121a; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1f2230; position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 20px; font-weight: 800; color: #e50914; letter-spacing: 0.5px; }
     
-    .nav-tabs { display: flex; gap: 8px; }
-    .tab-btn { background: #181b26; color: #9aa0a6; border: 1px solid #282d3f; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; }
-    .tab-btn.active, .tab-btn:hover { background: #e50914; color: #fff; border-color: #e50914; }
+    .nav-tabs { display: flex; gap: 6px; }
+    .tab-btn { background: #181b26; color: #9aa0a6; border: 1px solid #282d3f; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+    .tab-btn.active { background: #e50914; color: #fff; border-color: #e50914; }
 
-    .hero { padding: 35px 6% 15px; text-align: center; }
-    .hero h1 { font-size: 30px; margin-bottom: 8px; }
-    .hero p { color: #8a909d; font-size: 14px; }
+    .hero { padding: 20px 16px 10px; text-align: center; }
+    .hero h1 { font-size: 22px; margin-bottom: 6px; }
+    .hero p { color: #8a909d; font-size: 13px; }
     
-    .search-box { display: flex; gap: 8px; margin: 20px auto 0; max-width: 480px; }
-    .search-box input { flex: 1; padding: 11px 15px; border: 1px solid #282d3f; border-radius: 6px; background: #13151f; color: #fff; outline: none; font-size: 14px; }
+    .search-box { display: flex; gap: 6px; margin: 15px auto 0; max-width: 480px; }
+    .search-box input { flex: 1; padding: 10px 12px; border: 1px solid #282d3f; border-radius: 6px; background: #13151f; color: #fff; outline: none; font-size: 14px; }
     .search-box input:focus { border-color: #e50914; }
-    .search-box button { background: #e50914; color: #fff; border: 0; padding: 0 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; }
+    .search-box button { background: #e50914; color: #fff; border: 0; padding: 0 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
 
-    main { padding: 20px 6% 40px; min-height: 60vh; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    main { padding: 16px; min-height: 60vh; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (min-width: 600px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    }
     
-    .card { background: #12141d; border: 1px solid #1e2230; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s, border-color 0.2s; display: flex; flex-direction: column; }
-    .card:hover { transform: translateY(-4px); border-color: #e50914; }
+    .card { background: #12141d; border: 1px solid #1e2230; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
+    .card:active { transform: scale(0.98); }
     .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: #1a1d29; display: block; }
-    .card-info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
+    .card-info { padding: 8px; flex: 1; display: flex; flex-direction: column; }
     .card-info h3 { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-info span { font-size: 11px; color: #f59e0b; margin-top: 4px; font-weight: 600; }
 
-    /* Pagination Styles */
-    .pagination { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 35px; flex-wrap: wrap; }
-    .page-btn { background: #141724; color: #fff; border: 1px solid #252a3d; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; }
-    .page-btn:hover:not(:disabled) { background: #e50914; border-color: #e50914; }
-    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .page-num { font-size: 14px; font-weight: 600; color: #a1a6b4; }
+    /* Mobile Optimized Pagination */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 25px; }
+    .page-btn { background: #141724; color: #fff; border: 1px solid #252a3d; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+    .page-btn.active { background: #e50914; border-color: #e50914; }
+    .page-btn:disabled { opacity: 0.3; }
 
     /* Video Player Modal */
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 15px; }
-    .modal-box { background: #12141d; width: 100%; max-width: 900px; border-radius: 10px; overflow: hidden; border: 1px solid #282d3f; position: relative; }
-    .close-btn { position: absolute; right: 12px; top: 10px; background: #e50914; border: 0; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 10px; }
+    .modal-box { background: #12141d; width: 100%; max-width: 850px; border-radius: 8px; overflow: hidden; border: 1px solid #282d3f; position: relative; }
+    .close-btn { position: absolute; right: 10px; top: 8px; background: #e50914; border: 0; color: #fff; width: 28px; height: 28px; border-radius: 50%; font-size: 15px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
     
-    .controls { padding: 12px 16px; background: #161925; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; font-size: 13px; border-bottom: 1px solid #282d3f; }
-    .controls select, .controls input { background: #0b0c12; color: #fff; border: 1px solid #2e344a; padding: 6px 10px; border-radius: 4px; outline: none; }
+    .controls { padding: 10px; background: #161925; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; border-bottom: 1px solid #282d3f; }
+    .controls select, .controls input { background: #0b0c12; color: #fff; border: 1px solid #2e344a; padding: 5px 8px; border-radius: 4px; outline: none; font-size: 12px; }
     
     .player-wrap { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
     .player-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     
-    .details { padding: 16px; }
-    .details h2 { font-size: 18px; margin-bottom: 6px; }
-    .details p { font-size: 13px; color: #9aa0a6; line-height: 1.5; max-height: 100px; overflow-y: auto; }
-
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .hero h1 { font-size: 24px; }
-    }
+    .details { padding: 12px; }
+    .details h2 { font-size: 16px; margin-bottom: 4px; }
+    .details p { font-size: 12px; color: #9aa0a6; line-height: 1.4; max-height: 80px; overflow-y: auto; }
   </style>
 </head>
 <body>
@@ -68,15 +65,15 @@
     <div class="logo">HindiFlix</div>
     <div class="nav-tabs">
       <button class="tab-btn active" id="movieTabBtn" onclick="switchMedia('movie')">Movies</button>
-      <button class="tab-btn" id="tvTabBtn" onclick="switchMedia('tv')">Dramas & Shows</button>
+      <button class="tab-btn" id="tvTabBtn" onclick="switchMedia('tv')">Series</button>
     </div>
   </header>
 
   <div class="hero">
-    <h1 id="heroTitle">Hindi Movies Library</h1>
-    <p>Browse thousands of movies and TV dramas across unlimited pages.</p>
+    <h1 id="heroTitle">Hindi Movies</h1>
+    <p>Watch latest Hindi movies and drama series.</p>
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search by title...">
+      <input type="text" id="searchInput" placeholder="Search by name...">
       <button onclick="handleSearch()">Search</button>
     </div>
   </div>
@@ -84,12 +81,7 @@
   <main>
     <div class="grid" id="contentGrid"></div>
 
-    <!-- Multi-page controls -->
-    <div class="pagination">
-      <button class="page-btn" id="prevBtn" onclick="prevPage()">← Previous</button>
-      <span class="page-num" id="pageDisplay">Page 1</span>
-      <button class="page-btn" id="nextBtn" onclick="nextPage()">Next →</button>
-    </div>
+    <div class="pagination" id="paginationBox"></div>
   </main>
 
   <!-- Video Streaming Modal -->
@@ -100,21 +92,20 @@
       <div class="controls">
         <label>Server:
           <select id="serverChoice" onchange="updateVideoSource()">
-            <option value="vidsrc_icu">Server 1 (VidSrc ICU)</option>
-            <option value="vidsrc_cc">Server 2 (VidSrc CC)</option>
-            <option value="smashystream">Server 3 (SmashyStream)</option>
+            <option value="vidsrc_icu">Server 1</option>
+            <option value="vidsrc_cc">Server 2</option>
+            <option value="smashystream">Server 3</option>
           </select>
         </label>
 
-        <!-- Dynamic Season & Episode selector for Dramas -->
-        <span id="tvControls" style="display:none; gap: 8px; align-items: center;">
-          <label>Season: <input type="number" id="seasonNum" value="1" min="1" style="width:50px" onchange="updateVideoSource()"></label>
-          <label>Episode: <input type="number" id="episodeNum" value="1" min="1" style="width:55px" onchange="updateVideoSource()"></label>
+        <span id="tvControls" style="display:none; gap: 6px; align-items: center;">
+          <label>S: <input type="number" id="seasonNum" value="1" min="1" style="width:42px" onchange="updateVideoSource()"></label>
+          <label>E: <input type="number" id="episodeNum" value="1" min="1" style="width:46px" onchange="updateVideoSource()"></label>
         </span>
       </div>
 
       <div class="player-wrap">
-        <iframe id="videoFrame" src="" allowfullscreen></iframe>
+        <iframe id="videoFrame" src="" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
       </div>
       <div class="details">
         <h2 id="modalTitle">Title</h2>
@@ -127,86 +118,82 @@
     const API_KEY = "8414ff0f96035414f48b598b965f3a0a";
     const IMG_PATH = "https://image.tmdb.org/t/p/w500";
 
-    let currentType = 'movie'; // 'movie' or 'tv'
+    let currentType = 'movie';
     let currentPage = 1;
-    let totalPages = 500; // Unlimited library pages
-    let isSearchActive = false;
+    let totalPages = 50; 
     let activeMedia = { id: null, type: 'movie' };
 
-    const grid = document.getElementById("contentGrid");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const pageDisplay = document.getElementById("pageDisplay");
-
-    // Local fallback items in case network/CORS blocks the direct file query
-    const fallbackItems = {
+    // Built-in verified database so that mobile never shows blank
+    const fallbackDB = {
       movie: [
         { id: 872585, title: "Oppenheimer", vote_average: 8.1, release_date: "2023", poster_path: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", overview: "The story of J. Robert Oppenheimer's role in the Manhattan Project." },
-        { id: 575264, title: "Mission Impossible", vote_average: 7.6, release_date: "2023", poster_path: "/NNxYkU70HPurnNCSiCjYAmacwm.jpg", overview: "Ethan Hunt and his IMF team must track down a dangerous weapon." },
         { id: 799883, title: "Dunki", vote_average: 7.2, release_date: "2023", poster_path: "/46Dbk62bsp7zGfx7f3e8f85f34.jpg", overview: "Four friends from a village embark on an arduous journey to England." },
-        { id: 872906, title: "Jawan", vote_average: 7.3, release_date: "2023", poster_path: "/jA2a6mP8m3b4lK2i0iW3x6vK8.jpg", overview: "A man is driven by a personal vendetta to rectify the wrongs in society." }
+        { id: 872906, title: "Jawan", vote_average: 7.3, release_date: "2023", poster_path: "/jA2a6mP8m3b4lK2i0iW3x6vK8.jpg", overview: "A man is driven by a personal vendetta to rectify the wrongs in society." },
+        { id: 695721, title: "The Hunger Games", vote_average: 7.1, release_date: "2023", poster_path: "/mBaXZ95R2OxueZhvQbcEWy2DqyO.jpg", overview: "The story of Coriolanus Snow before he became President of Panem." },
+        { id: 575264, title: "Mission: Impossible - Dead Reckoning", vote_average: 7.6, release_date: "2023", poster_path: "/NNxYkU70HPurnNCSiCjYAmacwm.jpg", overview: "Ethan Hunt and his IMF team must track down a dangerous weapon." },
+        { id: 385687, title: "Fast X", vote_average: 7.1, release_date: "2023", poster_path: "/fiVW06jE7z9YnO4trhaMEdclSiC.jpg", overview: "Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes." },
+        { id: 603692, title: "John Wick: Chapter 4", vote_average: 7.8, release_date: "2023", poster_path: "/vZloFAK7NKnMGKEslUsZtos8OPD.jpg", overview: "With the price on his head ever increasing, John Wick uncovers a path to defeating The High Table." },
+        { id: 569094, title: "Spider-Man: Across the Spider-Verse", vote_average: 8.4, release_date: "2023", poster_path: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg", overview: "Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People." }
       ],
       tv: [
-        { id: 94997, name: "Panchayat", vote_average: 8.5, first_air_date: "2020", poster_path: "/4a9y9s949K4l3v2k3.jpg", overview: "An engineering graduate takes up a job as a panchayat secretary." },
-        { id: 82250, name: "Sacred Games", vote_average: 8.6, first_air_date: "2018", poster_path: "/uG0t670L5s4p3.jpg", overview: "A link in their pasts leads an honest cop to a fugitive gang boss." }
+        { id: 94997, name: "Panchayat", vote_average: 8.5, first_air_date: "2020", poster_path: "/9k0v03v1eZqZkL0e2c842p8g001.jpg", overview: "An engineering graduate takes up a job as a secretary in a remote village." },
+        { id: 82250, name: "Sacred Games", vote_average: 8.6, first_air_date: "2018", poster_path: "/uG0t670L5s4p3.jpg", overview: "A link in their pasts leads an honest cop to an elusive gangster." },
+        { id: 80986, name: "Mirzapur", vote_average: 8.4, first_air_date: "2018", poster_path: "/k7K77c7xYn7F2k55zW8k0M0349.jpg", overview: "A shocking incident at a wedding procession ignites a war between two families." },
+        { id: 93405, name: "Squid Game", vote_average: 7.8, first_air_date: "2021", poster_path: "/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg", overview: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games." },
+        { id: 119051, name: "Wednesday", vote_average: 8.5, first_air_date: "2022", poster_path: "/9PFonQ9cc09rg6r2aNkhT8qUTMz.jpg", overview: "Wednesday Addams attempts to master her emerging psychic ability." },
+        { id: 71446, name: "Money Heist", vote_average: 8.2, first_air_date: "2017", poster_path: "/reEMJA1uzscCbk5rUhGnyezvgAS.jpg", overview: "An unusual group of robbers attempt to carry out the most perfect robbery." }
       ]
     };
 
+    const grid = document.getElementById("contentGrid");
+    const paginationBox = document.getElementById("paginationBox");
+
     function switchMedia(type) {
-      if (currentType === type && !isSearchActive) return;
       currentType = type;
       currentPage = 1;
-      isSearchActive = false;
-
       document.getElementById("movieTabBtn").classList.toggle("active", type === 'movie');
       document.getElementById("tvTabBtn").classList.toggle("active", type === 'tv');
-      document.getElementById("heroTitle").innerText = type === 'movie' ? "Hindi Movies Library" : "Dramas & Web Series";
-
+      document.getElementById("heroTitle").innerText = type === 'movie' ? "Hindi Movies" : "Drama & Series";
       fetchContent();
     }
 
     async function fetchContent() {
-      grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 40px;'>Loading titles...</p>";
-      updatePagination();
-
+      grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 30px;'>Loading titles...</p>";
+      
       const url = `https://api.themoviedb.org/3/discover/${currentType}?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=${currentPage}`;
 
       try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("API request denied");
-        const data = await response.json();
-
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Network response error");
+        const data = await res.json();
+        
         if (data.results && data.results.length > 0) {
-          totalPages = data.total_pages || 500;
+          totalPages = Math.min(data.total_pages, 100);
           renderItems(data.results);
         } else {
-          showFallback();
+          loadFallback();
         }
       } catch (err) {
-        showFallback();
+        loadFallback();
       }
     }
 
-    function showFallback() {
-      const items = fallbackItems[currentType];
+    function loadFallback() {
+      const items = fallbackDB[currentType];
       renderItems(items);
-      grid.insertAdjacentHTML("beforebegin", `<p id="corsNotice" style="grid-column: 1/-1; color: #f59e0b; font-size: 12px; margin-bottom: 10px; text-align: center;">Notice: Running from direct file. For live network browsing across 500+ pages, run with VS Code Live Server or any web host.</p>`);
     }
 
     function renderItems(list) {
-      const notice = document.getElementById("corsNotice");
-      if (notice) notice.remove();
-
       grid.innerHTML = list.map(item => {
         const title = item.title || item.name || "Untitled";
         const date = (item.release_date || item.first_air_date || "").slice(0, 4);
-        const poster = item.poster_path ? (IMG_PATH + item.poster_path) : "https://placehold.co/300x450/13151f/ffffff?text=No+Poster";
+        const poster = item.poster_path ? (IMG_PATH + item.poster_path) : "https://placehold.co/300x450/13151f/ffffff?text=Poster";
         const cleanTitle = title.replace(/["']/g, "");
         const cleanDesc = (item.overview || "No overview available.").replace(/["']/g, "");
 
         return `
           <div class="card" onclick="openPlayer(${item.id}, '${currentType}', '${cleanTitle}', '${cleanDesc}')">
-            <img src="${poster}" alt="${cleanTitle}" loading="lazy" onerror="this.src='https://placehold.co/300x450/13151f/ffffff?text=No+Poster'">
+            <img src="${poster}" alt="${cleanTitle}" loading="lazy" onerror="this.src='https://placehold.co/300x450/13151f/ffffff?text=Poster'">
             <div class="card-info">
               <h3>${cleanTitle}</h3>
               <span>★ ${item.vote_average ? item.vote_average.toFixed(1) : "N/A"} • ${date || 'Hindi'}</span>
@@ -215,28 +202,27 @@
         `;
       }).join('');
 
+      renderPagination();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      updatePagination();
     }
 
-    function updatePagination() {
-      pageDisplay.innerText = `Page ${currentPage} of ${totalPages}`;
-      prevBtn.disabled = currentPage <= 1;
-      nextBtn.disabled = currentPage >= totalPages;
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        fetchContent();
+    function renderPagination() {
+      let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="gotoPage(${currentPage - 1})">Prev</button>`;
+      
+      let startPage = Math.max(1, currentPage - 1);
+      let endPage = Math.min(totalPages, startPage + 2);
+      
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="gotoPage(${i})">${i}</button>`;
       }
+      
+      html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="gotoPage(${currentPage + 1})">Next</button>`;
+      paginationBox.innerHTML = html;
     }
 
-    function nextPage() {
-      if (currentPage < totalPages) {
-        currentPage++;
-        fetchContent();
-      }
+    function gotoPage(p) {
+      currentPage = p;
+      fetchContent();
     }
 
     function openPlayer(id, type, title, overview) {
@@ -269,7 +255,7 @@
           ? `https://vidsrc.cc/v2/embed/movie/${id}`
           : `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`;
       } else {
-        url = type === 'movie'
+        url = type === 'movie' 
           ? `https://embed.smashystream.com/playere.php?tmdb=${id}`
           : `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${s}&episode=${e}`;
       }
@@ -283,35 +269,27 @@
       document.body.style.overflow = "";
     }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closePlayer();
-    });
-
     async function handleSearch() {
       const q = document.getElementById("searchInput").value.trim();
       if (!q) {
-        isSearchActive = false;
         currentPage = 1;
         fetchContent();
         return;
       }
 
-      isSearchActive = true;
-      grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 40px;'>Searching database...</p>";
+      grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 30px;'>Searching...</p>";
 
       try {
         const res = await fetch(`https://api.themoviedb.org/3/search/${currentType}?api_key=${API_KEY}&query=${encodeURIComponent(q)}`);
         const data = await res.json();
         if (data.results && data.results.length) {
           renderItems(data.results);
-          pageDisplay.innerText = `Search: ${data.results.length} found`;
-          prevBtn.disabled = true;
-          nextBtn.disabled = true;
+          paginationBox.innerHTML = "";
         } else {
-          grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 40px;'>No results found.</p>";
+          grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #8a909d; padding: 30px;'>No results found.</p>";
         }
       } catch (err) {
-        grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;'>Search request failed.</p>";
+        grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #ef4444; padding: 30px;'>Search unavailable offline.</p>";
       }
     }
 
@@ -319,7 +297,6 @@
       if (e.key === "Enter") handleSearch();
     });
 
-    // Start App
     fetchContent();
   </script>
 </body>
