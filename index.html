@@ -9,15 +9,20 @@ let currentFilter = "All";
 async function loadDramas() {
   dramaGrid.innerHTML = `
     <p style="color:#aaa;padding:20px">
-      Loading Hindi dramas...
+      Loading dramas...
     </p>
   `;
 
   try {
-    const searches = ["Hindi", "Indian", "Hindi drama", "Indian drama"];
+    const queries = [
+      "Hindi",
+      "Indian",
+      "Hindi drama",
+      "Indian drama"
+    ];
 
     const results = await Promise.all(
-      searches.map(q =>
+      queries.map(q =>
         fetch(
           "https://api.tvmaze.com/search/shows?q=" +
           encodeURIComponent(q)
@@ -30,10 +35,9 @@ async function loadDramas() {
     results.flat().forEach(item => {
       const show = item.show;
 
-      if (!show || !show.name) return;
-      if (!show.image) return;
+      if (!show || !show.name || !show.image) return;
 
-      const badGenres = [
+      const excluded = [
         "Reality",
         "Game Show",
         "Talk Show",
@@ -42,75 +46,134 @@ async function loadDramas() {
         "News"
       ];
 
-      if (show.genres?.some(g => badGenres.includes(g))) return;
+      if (
+        show.genres?.some(g =>
+          excluded.includes(g)
+        )
+      ) return;
 
       map.set(show.id, show);
     });
 
     allShows = [...map.values()]
-      .sort((a, b) =>
-        (b.rating?.average || 0) -
-        (a.rating?.average || 0)
+      .sort(
+        (a,b) =>
+          (b.rating?.average || 0) -
+          (a.rating?.average || 0)
       )
       .slice(0, 30);
 
     renderDramas(allShows);
 
   } catch (error) {
+
     console.error(error);
 
     dramaGrid.innerHTML = `
-      <p style="color:#ff5555;padding:20px">
-        Drama data load failed. Please refresh.
+      <p style="color:#f55;padding:20px">
+        Failed to load dramas.
       </p>
     `;
   }
 }
 
+
 function renderDramas(shows) {
 
   const filtered = shows.filter(show => {
 
-    if (currentFilter === "All") return true;
+    if (currentFilter === "All")
+      return true;
 
-    return show.genres?.includes(currentFilter);
+    return show.genres?.includes(
+      currentFilter
+    );
   });
 
-  if (!filtered.length) {
-    dramaGrid.innerHTML = `
-      <p style="color:#aaa;padding:20px">
-        No dramas found.
-      </p>
-    `;
-    return;
-  }
+  dramaGrid.innerHTML =
+    filtered.map(show => {
 
-  dramaGrid.innerHTML = filtered.map(show => {
+      const poster =
+        show.image?.medium ||
+        show.image?.original;
 
-    const poster =
-      show.image?.medium ||
-      show.image?.original ||
-      "https://via.placeholder.com/300x450?text=No+Poster";
-
-    const rating =
-      show.rating?.average
-        ? show.rating.average.toFixed(1)
-        : "N/A";
-
-    const year =
-      show.premiered
-        ? show.premiered.substring(0, 4)
-        : "N/A";
-
-    return `
-      <div class="movie-card"
-           onclick="showDetails(${show.id})">
-
-        <img
-          src="${poster}"
-          alt="${escapeHTML(show.name)}"
-          loading="lazy"
+      return `
+        <div
+          class="movie-card"
+          onclick="openDrama(${show.id})"
         >
 
-        <div class="movie-info">
-          <h3>${escapeHTML(show.name
+          <img
+            src="${poster}"
+            alt="${escapeHTML(show.name)}"
+            loading="lazy"
+          >
+
+          <div class="movie-info">
+
+            <h3>
+              ${escapeHTML(show.name)}
+            </h3>
+
+            <p>
+              ⭐ ${show.rating?.average || "N/A"}
+              • ${show.premiered?.slice(0,4) || ""}
+            </p>
+
+            <small>
+              ${show.genres?.slice(0,2).join(" • ") || "Drama"}
+            </small>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+}
+
+
+async function openDrama(id) {
+
+  const show =
+    allShows.find(s => s.id === id);
+
+  if (!show) return;
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+
+    `
+    <div id="dramaModal"
+         class="modal-bg">
+
+      <div class="modal-box">
+
+        <button
+          class="modal-close"
+          onclick="closeDrama()">
+          ×
+        </button>
+
+        <img
+          src="${show.image?.original || show.image?.medium}"
+          alt=""
+        >
+
+        <div class="modal-content">
+
+          <h2>
+            ${escapeHTML(show.name)}
+          </h2>
+
+          <p>
+            ⭐ ${show.rating?.average || "N/A"}
+          </p>
+
+          <p>
+            ${show.genres?.join(" • ") || "Drama"}
+          </p>
+
+          <p>
+            ${cleanText(show.summary) ||
+              "No description available
