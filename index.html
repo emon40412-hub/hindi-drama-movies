@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>HindiFlix</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0b0b0f;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      padding: 18px;
+      background: #111118;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 15px;
+    }
+
+    .hero {
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(#171725, #0b0b0f);
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      color: #aaa;
+      margin-bottom: 25px;
+    }
+
+    .search {
+      width: 90%;
+      max-width: 500px;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .section {
+      padding: 25px 18px;
+    }
+
+    .section h2 {
+      margin-bottom: 18px;
+    }
+
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .card {
+      background: #15151d;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .poster {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      background: #252532;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+    }
+
+    .info {
+      padding: 12px;
+    }
+
+    .info h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .info p {
+      color: #999;
+      font-size: 13px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    @media (min-width: 700px) {
+      .movies {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">HindiFlix</div>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Movies</a>
+      <a href="#">Drama</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Watch Hindi Movies & Drama</h1>
+    <p>Discover movies and dramas in one place.</p>
+
+    <input
+      class="search"
+      type="text"
+      placeholder="Search movies or dramas..."
+    >
+  </section>
+
+  <section class="section">
+    <h2>🔥 Trending</h2>
+
+    <div class="movies">
+
+      <div class="card">
+        <div class="poster">Poster</div>
+        <div class="info">
+          <h3>Movie Name</h3>
+          <p>⭐ 8.5 • Hindi</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">Poster</div>
+        <div class="info">
+          <h3>Drama Name</h3>
+          <p>⭐ 8.2 • Drama</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">Poster</div>
+        <div class="info">
+          <h3>Movie Name</h3>
+          <p>⭐ 7.9 • Hindi</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="poster">Poster</div>
+        <div class="info">
+          <h3>Drama Name</h3>
+          <p>⭐ 8.1 • Drama</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    © 2026 HindiFlix
+  </footer>
+
+</body>
+</html>
